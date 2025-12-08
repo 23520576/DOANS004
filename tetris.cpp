@@ -96,11 +96,24 @@ bool canMove(int dx, int dy){
     return true;
 }
 
-// SV2 sẽ viết hàm removeLine() ở đây
-// Hàm này sẽ xóa các dòng đã đầy và di chuyển các dòng phía trên xuống
+void removeLine(){
+    int j;
+    for (int i = H-2; i > 0; i--){
+        for (j = 1; j < W-1; j++)
+            if (board[i][j] == ' ') break;
+        if (j == W-1){
+            for (int ii = i; ii > 0; ii--)
+                for (j = 1; j < W-1; j++)
+                    board[ii][j] = board[ii-1][j];
+            i++;
+            draw();
+            Sleep(200);
+        }
+    }
+}
 
 void rotate(){
-    // SV4 sẽ viết code xoay block ở đây
+  
 }
 
 int main()
@@ -113,12 +126,11 @@ int main()
     while (1){
         boardDelBlock();
         
-        // Khối rơi xuống tự động (yêu cầu SV1)
         if (canMove(0,1)) y++;
         else {
             block2Board();
-            // SV2 sẽ gọi removeLine() ở đây sau khi đặt block
-            // removeLine();
+            
+            removeLine();
             x = 5; y = 0; b = rand() % 7;
         }
         

@@ -1,0 +1,30 @@
+# Compiled files
+*.exe
+*.o
+*.obj
+*.out
+*.a
+*.lib
+*.dll
+*.so
+
+# Build directories
+build/
+dist/
+Debug/
+Release/
+
+# IDE files
+.vs/
+.vscode/
+*.suo
+*.user
+*.sln
+*.vcxproj
+*.vcxproj.filters
+
+# OS files
+.DS_Store
+Thumbs.db
+*.log
+
