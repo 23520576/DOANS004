@@ -233,12 +233,17 @@ void removeLine(){
                 board[0][jj] = topBorder[jj];
             }
             i++;
-            linesRemovedThisTurn++;
+            linesRemovedThisTurn++; 
             draw();
             Sleep(200);
         }
     }
+    if (linesRemovedThisTurn > 0) {
+        linesRemoved += linesRemovedThisTurn;
+        fallSpeed = max(50, 200 - (linesRemoved / 5) * 20);
+    }
 }
+
 bool canRotatePiece() {
     if (currentPiece == nullptr) return false;
     Piece* tempPiece = createPiece(b);
