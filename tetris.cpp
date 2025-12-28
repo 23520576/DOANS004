@@ -3,52 +3,122 @@
 #include <windows.h>
 #include <cstdlib>
 #include <ctime>
-
+#include <cctype>  
+#include <algorithm>  
+#include <string> 
 using namespace std;
 
 #define H 20
 #define W 15
 
-char board[H][W] = {} ;
+int board[H][W] = {} ;
+class Piece {
+protected:
+    char shape[4][4];  
+public:
+    Piece() {
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+                shape[i][j] = ' ';
+    }
+    virtual void rotate() {
 
-char blocks[][4][4] = {
-        // 0: I (dọc)
-        {{' ','I',' ',' '},
-         {' ','I',' ',' '},
-         {' ','I',' ',' '},
-         {' ','I',' ',' '}},
-        // 1: O (vuông)
-        {{' ',' ',' ',' '},
-         {' ','O','O',' '},
-         {' ','O','O',' '},
-         {' ',' ',' ',' '}},
-        // 2: T
-        {{' ',' ',' ',' '},
-         {' ','T',' ',' '},
-         {'T','T','T',' '},
-         {' ',' ',' ',' '}},
-        // 3: S
-        {{' ',' ',' ',' '},
-         {' ','S','S',' '},
-         {'S','S',' ',' '},
-         {' ',' ',' ',' '}},
-        // 4: Z
-        {{' ',' ',' ',' '},
-         {'Z','Z',' ',' '},
-         {' ','Z','Z',' '},
-         {' ',' ',' ',' '}},
-        // 5: J
-        {{' ',' ',' ',' '},
-         {'J',' ',' ',' '},
-         {'J','J','J',' '},
-         {' ',' ',' ',' '}},
-        // 6: L
-        {{' ',' ',' ',' '},
-         {' ',' ','L',' '},
-         {'L','L','L',' '},
-         {' ',' ',' ',' '}}
+        char temp[4][4];
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+                temp[i][j] = shape[i][j];
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+                shape[i][j] = temp[3-j][i];
+    }
+
+    char getShape(int i, int j) const {
+        return shape[i][j];
+    }
+
+    void setShape(int i, int j, char c) {
+        shape[i][j] = c;
+    }
+    virtual ~Piece() {}
 };
-
+class PieceI : public Piece {
+public:
+    PieceI() {
+        shape[0][1] = 'I';
+        shape[1][1] = 'I';
+        shape[2][1] = 'I';
+        shape[3][1] = 'I';
+    }
+};
+class PieceO : public Piece {
+public:
+    PieceO() {
+        shape[1][1] = 'O';
+        shape[1][2] = 'O';
+        shape[2][1] = 'O';
+        shape[2][2] = 'O';
+    }
+    
+    void rotate() override {
+    }
+};
+class PieceT : public Piece {
+public:
+    PieceT() {
+        shape[1][1] = 'T';
+        shape[2][0] = 'T';
+        shape[2][1] = 'T';
+        shape[2][2] = 'T';
+    }
+};
+class PieceS : public Piece {
+public:
+    PieceS() {
+        shape[1][1] = 'S';
+        shape[1][2] = 'S';
+        shape[2][0] = 'S';
+        shape[2][1] = 'S';
+    }
+};
+class PieceZ : public Piece {
+public:
+    PieceZ() {
+        shape[1][0] = 'Z';
+        shape[1][1] = 'Z';
+        shape[2][1] = 'Z';
+        shape[2][2] = 'Z';
+    }
+};
+class PieceJ : public Piece {
+public:
+    PieceJ() {
+        shape[1][0] = 'J';
+        shape[2][0] = 'J';
+        shape[2][1] = 'J';
+        shape[2][2] = 'J';
+    }
+};
+class PieceL : public Piece {
+public:
+    PieceL() {
+        shape[1][2] = 'L';
+        shape[2][0] = 'L';
+        shape[2][1] = 'L';
+        shape[2][2] = 'L';
+    }
+};
+Piece* createPiece(int type) {
+    switch(type) {
+        case 0: return new PieceI();
+        case 1: return new PieceO();
+        case 2: return new PieceT();
+        case 3: return new PieceS();
+        case 4: return new PieceZ();
+        case 5: return new PieceJ();
+        case 6: return new PieceL();
+        default: return new PieceI();
+    }
+}
 int x=4,y=0,b=1;
 
 int fallSpeed = 200; 
